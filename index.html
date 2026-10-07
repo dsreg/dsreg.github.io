@@ -247,7 +247,7 @@ figcaption .label { font-family: var(--font-sans); font-weight: 600; color: var(
   display: flex; flex-direction: column; gap: 0.8rem;
   padding: 1rem clamp(0.95rem, 3vw, 1.3rem) 1.1rem;
 }
-.result .takeaway { font-size: 1.17rem; line-height: 1.48; font-weight: 600; color: var(--fg); text-wrap: balance; }
+.result .takeaway { font-size: 1.17rem; line-height: 1.48; font-weight: 600; color: var(--fg); text-wrap: pretty; }
 .key {
   display: flex; flex-direction: column; align-items: stretch; gap: 0.35rem;
   padding: 0.75rem clamp(0.6rem, 2.4vw, 1rem);
@@ -466,7 +466,7 @@ window.MathJax = {
       <div class="result" role="group" aria-labelledby="res-ident">
         <h3 id="res-ident">Identifiability without reconstruction</h3>
         <div class="result-body">
-          <p class="takeaway">Every minimizer of the support count recovers each world latent, up to sign and permutation.</p>
+          <p class="takeaway">Every minimizer recovers each world latent, up to sign and permutation.</p>
           <div class="key">
             <div class="math-block k-wide">\[ R \in \arg\min_{R\in O(d)} \Big\|\frac{\partial x}{\partial \tilde z}\Big\|_{0,\mu} \;\Longrightarrow\; RQ \text{ is a signed permutation, } \tilde z_i = s_i\, z_{\pi(i)} \text{ a.s.} \]</div>
             <div class="math-block k-narrow">\[ \begin{gathered} R \in \arg\min_{R\in O(d)} \Big\|\frac{\partial x}{\partial \tilde z}\Big\|_{0,\mu} \\ \Longrightarrow\; RQ \text{ is a signed permutation,} \\ \tilde z_i = s_i\, z_{\pi(i)} \text{ a.s.} \end{gathered} \]</div>
@@ -478,7 +478,7 @@ window.MathJax = {
       <div class="result" role="group" aria-labelledby="res-weaker">
         <h3 id="res-weaker">Strictly weaker than prior structural conditions</h3>
         <div class="result-body">
-          <p class="takeaway">Structural Diversity is implied by each earlier structural condition and implies none of them.</p>
+          <p class="takeaway">Structural Diversity follows from each earlier condition and implies none of them.</p>
           <div class="key">
             <ol class="chain" aria-label="Each condition implies the next">
               <li class="chain-step"><span class="chain-name">Structural Sparsity</span><span class="chain-def chain-sub">both forms</span></li>
@@ -497,7 +497,7 @@ window.MathJax = {
       <div class="result" role="group" aria-labelledby="res-stable">
         <h3 id="res-stable">Stable under estimation error</h3>
         <div class="result-body">
-          <p class="takeaway">If the estimated Jacobian is within \(\varepsilon\) of the true one, every minimizer of the thresholded count is within \(\delta\) of a signed permutation.</p>
+          <p class="takeaway">Small Jacobian errors keep every minimizer within \(\delta\) of a signed permutation.</p>
           <div class="key">
             <div class="math-block m-wide">\[ \tau+\varepsilon<\sigma\,\rho^*(\delta) \;\Longrightarrow\; \min_{P}\,\|\widehat R Q-P\|_F<\delta , \]</div>
             <div class="math-block m-narrow">\[ \begin{gathered} \tau+\varepsilon<\sigma\,\rho^*(\delta) \\ \Longrightarrow\; \min_{P}\,\|\widehat R Q-P\|_F<\delta , \end{gathered} \]</div>
