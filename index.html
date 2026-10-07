@@ -145,6 +145,7 @@ h3 {
   font-weight: 600;
   font-size: 1.25rem;
   line-height: 1.3;
+  text-wrap: balance;
 }
 .flow > h3 { margin-top: 0.9rem; margin-bottom: -0.35rem; }
 .flow > h3:first-child { margin-top: 0; }
@@ -198,15 +199,37 @@ figcaption .label { font-family: var(--font-sans); font-weight: 600; color: var(
 .teaser { margin-top: clamp(2.25rem, 5vw, 3rem); }
 .teaser figcaption { font-size: 1.03rem; }
 
-/* Footprint definition beside its figure; the row spans the column */
-.split { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: clamp(1.25rem, 3.5vw, 2.25rem); align-items: start; }
-.split > * { min-width: 0; }
-.split .fig { margin: 0; gap: 0.6rem; }
-.split figcaption { font-size: 0.9rem; }
-
-/* Result boxes */
-.result {
+/* Footprint definition beside its figure: figure on the left, text on the right, both centred vertically */
+.def-split {
+  display: grid;
+  grid-template-columns: 38% minmax(0, 1fr);
+  gap: clamp(1.25rem, 3.5vw, 2.25rem);
+  align-items: center;
+}
+.def-split > * { min-width: 0; }
+.def-text { grid-column: 2; grid-row: 1; display: flex; flex-direction: column; gap: 0.95rem; }
+.def-split .fig { grid-column: 1; grid-row: 1; margin: 0; gap: 0.6rem; }
+.def-split .panel { width: 182px; max-width: 100%; margin-inline: auto; }
+.def-split figcaption { font-size: 0.9rem; text-align: center; text-wrap: balance; }
+.defn {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.1rem 1.1rem;
+  padding: 0.45rem 1rem;
   background: var(--box-bg);
+  border: 1px solid var(--box-edge);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+}
+.defn-label {
+  font-family: var(--font-sans); font-weight: 600; font-size: 1.2rem; line-height: 1.2;
+  font-variant-caps: all-small-caps; letter-spacing: 0.06em;
+  color: var(--accent-strong);
+}
+.defn .math-block { min-width: 0; }
+.defn mjx-container[jax="SVG"][display="true"] { margin: 0.1em 0 !important; }
+
+/* Result boxes: name, one takeaway, one emphasized statement, then the conditions in a quieter voice */
+.result {
+  background: var(--bg);
   border: 1px solid var(--box-edge);
   border-left: 3px solid var(--accent);
   border-radius: 6px;
@@ -220,8 +243,56 @@ figcaption .label { font-family: var(--font-sans); font-weight: 600; color: var(
   color: var(--accent-strong);
   letter-spacing: 0.005em;
 }
-.result p { padding: 0.85rem clamp(0.95rem, 3vw, 1.3rem) 0.95rem; font-size: 1.0625rem; line-height: 1.64; }
-.results { display: flex; flex-direction: column; gap: 1rem; margin-block: 0.4rem; }
+.result-body {
+  display: flex; flex-direction: column; gap: 0.8rem;
+  padding: 1rem clamp(0.95rem, 3vw, 1.3rem) 1.1rem;
+}
+.result .takeaway { font-size: 1.17rem; line-height: 1.48; font-weight: 600; color: var(--fg); text-wrap: balance; }
+.key {
+  display: flex; flex-direction: column; align-items: stretch; gap: 0.35rem;
+  padding: 0.75rem clamp(0.6rem, 2.4vw, 1rem);
+  background: var(--box-bg);
+  border: 1px solid var(--box-edge);
+  border-radius: 6px;
+  text-align: center;
+}
+.key mjx-container[jax="SVG"][display="true"] { margin: 0.25em 0 !important; }
+.key-note { font-family: var(--font-sans); font-size: 0.9rem; line-height: 1.45; color: var(--muted); text-wrap: balance; }
+.cond {
+  display: grid; grid-template-columns: 5.6rem minmax(0, 1fr); gap: 0 0.5rem;
+  font-family: var(--font-sans); font-size: 0.97rem; line-height: 1.55; color: var(--muted);
+}
+.cond-tag {
+  font-weight: 600; font-size: 1.14rem; line-height: 1.36;
+  font-variant-caps: all-small-caps; letter-spacing: 0.07em;
+  color: var(--accent-strong);
+}
+.results { display: flex; flex-direction: column; gap: 1.1rem; margin-block: 0.4rem; }
+
+/* The chain of implications between footprint conditions */
+.chain { display: flex; align-items: stretch; gap: 0.3rem; margin: 0.1rem 0 0; padding: 0; list-style: none; }
+.chain-step {
+  flex: 1 1 0; min-width: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.25rem;
+  padding: 0.6rem 0.45rem;
+  background: var(--bg);
+  border: 1px solid var(--box-edge);
+  border-radius: 6px;
+}
+.chain-step.is-target { border: 1.5px solid var(--accent); }
+.chain-name { font-family: var(--font-sans); font-weight: 600; font-size: 0.97rem; line-height: 1.25; color: var(--fg); }
+.chain-step.is-target .chain-name { color: var(--accent-strong); }
+.chain-def { font-size: 0.95rem; line-height: 1.3; color: var(--ink-soft); }
+.chain-sub { font-family: var(--font-sans); font-size: 0.88rem; color: var(--muted); }
+.chain-arrow { flex: none; align-self: center; display: flex; }
+.chain-arrow svg { width: 1.15rem; height: 1.15rem; fill: var(--accent); }
+
+/* The identifiability statement is the widest display; it breaks into three lines before it would overflow its panel. */
+.k-narrow { display: none; }
+@media (max-width: 760px) {
+  .k-wide { display: none; }
+  .k-narrow { display: block; }
+}
 
 /* Code and BibTeX */
 pre {
@@ -258,8 +329,13 @@ span.nw:has(mjx-container) { white-space: nowrap; }
   .panels { flex-direction: column; align-items: stretch; gap: 1.4rem; }
   .sub { flex: none; }
   .sub.compact .fig-link { max-width: min(70%, 380px); margin-inline: auto; }
-  .split { grid-template-columns: minmax(0, 1fr); }
-  .split .fig { width: 100%; max-width: 220px; margin-inline: auto; }
+  .def-split { grid-template-columns: minmax(0, 1fr); }
+  .def-text, .def-split .fig { grid-column: 1; grid-row: auto; }
+  .def-split .fig { width: 100%; max-width: 250px; margin-inline: auto; }
+  .def-split .panel { width: 170px; }
+  .chain { flex-direction: column; align-items: center; gap: 0.2rem; }
+  .chain-step { flex: none; width: 100%; max-width: 19rem; }
+  .chain-arrow svg { transform: rotate(90deg); }
   .m-wide { display: none; }
   .m-narrow { display: block; }
 }
@@ -267,7 +343,10 @@ span.nw:has(mjx-container) { white-space: nowrap; }
   body { font-size: 1.0625rem; line-height: 1.6; }
   .authors { font-size: 1.125rem; gap: 0.2rem 1.2rem; }
   .tldr { font-size: 1.125rem; line-height: 1.52; }
-  .abstract-box p, .result p { font-size: 1rem; }
+  .abstract-box p { font-size: 1rem; }
+  .result .takeaway { font-size: 1.08rem; text-wrap: pretty; }
+  .cond { display: block; }
+  .cond-tag { margin-right: 0.5em; }
   figcaption, .teaser figcaption { font-size: 0.92rem; }
   /* Dense multi-panel figures keep a legible size and pan inside their own box. */
   .fig-link.pan { overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; }
@@ -366,8 +445,15 @@ window.MathJax = {
 <section id="theory">
   <h2>Theoretical results</h2>
   <div class="flow">
-    <div class="split">
-      <p>The <em>dependency footprint</em> \(\mathcal{S}_i\) of latent \(z_i\) is the set of observed variables that \(z_i\) affects, and <em>Structural Diversity</em> asks that no two latents share a footprint, \(\mathcal{S}_i\ne\mathcal{S}_j\) for all <span class="nw">\(i\ne j\).</span> When two latents affect exactly the same observed variables, a rotation within the pair changes nothing the dependency structure can see, so recovery from structure alone needs distinct footprints.</p>
+    <div class="def-split">
+      <div class="def-text">
+        <p>The <em>dependency footprint</em> \(\mathcal{S}_i\) of latent \(z_i\) is the set of observed variables that \(z_i\) affects, and <em>Structural Diversity</em> asks that no two latents share a footprint:</p>
+        <div class="defn" role="group" aria-label="Structural Diversity">
+          <span class="defn-label" aria-hidden="true">Structural Diversity</span>
+          <div class="math-block">\[\mathcal S_i \ne \mathcal S_j \quad \text{for all } i \ne j.\]</div>
+        </div>
+        <p>When two latents affect exactly the same observed variables, a rotation within the pair changes nothing the dependency structure can see, so recovery from structure alone needs distinct footprints.</p>
+      </div>
       <figure class="fig">
         <div class="panel">
           <a class="fig-link" href="static/images/footprints.png"><img src="static/images/footprints.png" width="614" height="989" alt="Top: a graph with arrows from latents z1, z2, z3 to observed variables x1 to x4. Bottom: the matching support matrix, with a dot where a latent affects an observed variable. Each latent column has a different pattern of dots."></a>
@@ -379,15 +465,46 @@ window.MathJax = {
     <div class="results">
       <div class="result" role="group" aria-labelledby="res-ident">
         <h3 id="res-ident">Identifiability without reconstruction</h3>
-        <p>Start from LeJEPA's output, \(h(z)=Qz\) with <span class="nw">\(Q\in O(d)\).</span> Under Structural Diversity and a faithfulness condition that rules out cancellations hiding genuine Jacobian entries (Functional <span class="nb">no-cancellation</span>), every minimizer \(R\) of the support criterion makes \(RQ\) a signed permutation, so each variable of \(Rh(z)\) is one world latent up to sign and relabeling. A variable that mixes several latents depends on the union of their footprints, so when footprints are distinct, any mixing raises the total count.</p>
+        <div class="result-body">
+          <p class="takeaway">Every minimizer of the support count recovers each world latent, up to sign and permutation.</p>
+          <div class="key">
+            <div class="math-block k-wide">\[ R \in \arg\min_{R\in O(d)} \Big\|\frac{\partial x}{\partial \tilde z}\Big\|_{0,\mu} \;\Longrightarrow\; RQ \text{ is a signed permutation, } \tilde z_i = s_i\, z_{\pi(i)} \text{ a.s.} \]</div>
+            <div class="math-block k-narrow">\[ \begin{gathered} R \in \arg\min_{R\in O(d)} \Big\|\frac{\partial x}{\partial \tilde z}\Big\|_{0,\mu} \\ \Longrightarrow\; RQ \text{ is a signed permutation,} \\ \tilde z_i = s_i\, z_{\pi(i)} \text{ a.s.} \end{gathered} \]</div>
+          </div>
+          <p class="cond"><span class="cond-tag">Assumes</span><span>LeJEPA's output \(h(z)=Qz\) with <span class="nw">\(Q\in O(d)\),</span> Structural Diversity, and Functional <span class="nb">no-cancellation</span>, a faithfulness condition that rules out cancellations hiding genuine Jacobian entries.</span></p>
+          <p class="cond"><span class="cond-tag">Why</span><span>A variable that mixes several latents depends on the union of their footprints, so when footprints are distinct, any mixing raises the total count.</span></p>
+        </div>
       </div>
       <div class="result" role="group" aria-labelledby="res-weaker">
         <h3 id="res-weaker">Strictly weaker than prior structural conditions</h3>
-        <p>Structural Sparsity in both of its forms, <span class="nb">Non-Inclusion</span>, and Structural Variability each imply Structural Diversity, and none of the converses holds. A global latent such as illumination has a footprint that strictly contains those of local latents. Such nested footprints violate <span class="nb">Non-Inclusion</span> and both forms of Structural Sparsity yet satisfy Structural Diversity. Structural Diversity also holds when two footprints differ in a single variable, a case that violates all four.</p>
+        <div class="result-body">
+          <p class="takeaway">Structural Diversity is implied by each earlier structural condition and implies none of them.</p>
+          <div class="key">
+            <ol class="chain" aria-label="Each condition implies the next">
+              <li class="chain-step"><span class="chain-name">Structural Sparsity</span><span class="chain-def chain-sub">both forms</span></li>
+              <li class="chain-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 9.2h12.4V5.5L21.5 12l-6.1 6.5v-3.7H3z"/></svg></li>
+              <li class="chain-step"><span class="chain-name"><span class="nb">Non-Inclusion</span></span><span class="chain-def">\(\mathcal S_i\not\subseteq\mathcal S_j\)</span></li>
+              <li class="chain-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 9.2h12.4V5.5L21.5 12l-6.1 6.5v-3.7H3z"/></svg></li>
+              <li class="chain-step"><span class="chain-name">Structural Variability</span><span class="chain-def">\(|\mathcal S_i\triangle\mathcal S_j|\ge 2\)</span></li>
+              <li class="chain-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 9.2h12.4V5.5L21.5 12l-6.1 6.5v-3.7H3z"/></svg></li>
+              <li class="chain-step is-target"><span class="chain-name">Structural Diversity</span><span class="chain-def">\(\mathcal S_i\ne\mathcal S_j\)</span></li>
+            </ol>
+            <p class="key-note">Each formula is required for all <span class="nw">\(i\ne j\).</span></p>
+          </div>
+          <p class="cond"><span class="cond-tag">Example</span><span>Nested footprints, such as a global latent like illumination whose footprint strictly contains those of local latents, violate <span class="nb">Non-Inclusion</span> and both forms of Structural Sparsity. Footprints that differ in a single variable violate all four prior conditions. Both patterns satisfy Structural Diversity.</span></p>
+        </div>
       </div>
       <div class="result" role="group" aria-labelledby="res-stable">
         <h3 id="res-stable">Stable under estimation error</h3>
-        <p>Suppose the estimated Jacobian is within \(\varepsilon\) of the true one in every row, and count only entries of magnitude above a threshold <span class="nw">\(\tau&gt;\varepsilon\).</span> Under Structural Diversity, Functional <span class="nb">no-cancellation</span>, and bounded rows of the true Jacobian, this thresholded count still has minimizers, and every minimizer \(R\) puts \(RQ\) within Frobenius distance \(\delta\) of a signed permutation whenever <span class="nw">\(\tau+\varepsilon&lt;\sigma\rho^*(\delta)\).</span> Here \(\sigma\) and \(\rho^*(\delta)\) are positive constants of the true Jacobian and its support pattern.</p>
+        <div class="result-body">
+          <p class="takeaway">If the estimated Jacobian is within \(\varepsilon\) of the true one, every minimizer of the thresholded count is within \(\delta\) of a signed permutation.</p>
+          <div class="key">
+            <div class="math-block m-wide">\[ \tau+\varepsilon<\sigma\,\rho^*(\delta) \;\Longrightarrow\; \min_{P}\,\|\widehat R Q-P\|_F<\delta , \]</div>
+            <div class="math-block m-narrow">\[ \begin{gathered} \tau+\varepsilon<\sigma\,\rho^*(\delta) \\ \Longrightarrow\; \min_{P}\,\|\widehat R Q-P\|_F<\delta , \end{gathered} \]</div>
+            <p class="key-note">where \(\delta&gt;0\) and \(P\) ranges over signed permutations. The same condition guarantees that minimizers of the thresholded count exist.</p>
+          </div>
+          <p class="cond"><span class="cond-tag">Assumes</span><span>the conditions of the identifiability result with <span class="nw">\(d\ge2\),</span> and bounded rows of the true Jacobian. The estimation error is measurable and at most \(\varepsilon\) in every row, entries are counted only above a threshold <span class="nw">\(\tau&gt;\varepsilon\),</span> and \(\sigma\) and \(\rho^*(\delta)\) are positive constants of the true Jacobian and its support pattern.</span></p>
+        </div>
       </div>
     </div>
 
@@ -414,15 +531,6 @@ window.MathJax = {
       <figcaption><span class="label">Figure 3</span><strong>DSReg recovers individual latents wherever Structural Diversity holds, and only there.</strong> (a)&nbsp;DSReg (solid) is near ceiling at every <span class="nw">\(N\),</span> twenty runs. LeJEPA (dashed) stays mixed. (b)&nbsp;On analytic orbits <span class="nw">\(h=Qz\),</span> recovery succeeds wherever the condition holds and falls back to the shared pair subspace where it fails.</figcaption>
     </figure>
 
-    <h3>Recovered latents support sparse use</h3>
-    <p>Many modules built on a world model act through a few variables at a time, such as a controller moving one object, and a rotation breaks that interface because one learned variable then moves several physical factors at once. On states \(h=Qz\) with a random orthogonal <span class="nw">\(Q\),</span> DSReg improves visual editing, sparse control, rollout prediction, and surprise detection.</p>
-    <figure class="fig">
-      <div class="panel">
-        <a class="fig-link pan" href="static/images/sparse_use.png"><img src="static/images/sparse_use.png" width="1820" height="758" alt="Six bar charts comparing LeJEPA in gray and DSReg in teal: editing success on TwoRoom, FetchSlide and PushT, and on PushT the MPC success, rollout R squared and surprise AUROC. DSReg is higher in every panel."></a>
-      </div>
-      <figcaption><span class="label">Figure 4</span><strong>DSReg improves all six sparse-use probes.</strong> DSReg in teal, LeJEPA in gray. Tasks are (1) editing (top) and (2) control, prediction, and monitoring (bottom).</figcaption>
-    </figure>
-
     <h3>Encoders trained from pixels</h3>
     <p>On convolutional encoders trained from pixels, DSReg reaches the supervised Procrustes oracle, while PCA, Varimax, and FastICA leave the latents mixed (a). The match holds at every width tested as the representation widens beyond the number of world latents (b).</p>
     <figure class="fig">
@@ -436,7 +544,34 @@ window.MathJax = {
           <p class="subcap">(b) Overparameterized: \(\dim\tilde z\) grows</p>
         </div>
       </div>
-      <figcaption><span class="label">Figure 5</span><strong>DSReg matches the supervised Procrustes oracle on encoders trained from pixels.</strong> (a)&nbsp;Latent-only rotations leave the variables mixed. DSReg closes the gap to the label-fitted oracle (fifteen seeds). (b)&nbsp;With \(\dim z=8\) fixed, the match holds within \(0.001\) as the estimate widens to \(\dim\tilde z=32\) (five seeds).</figcaption>
+      <figcaption><span class="label">Figure 4</span><strong>DSReg matches the supervised Procrustes oracle on encoders trained from pixels.</strong> (a)&nbsp;Latent-only rotations leave the variables mixed. DSReg closes the gap to the label-fitted oracle (fifteen seeds). (b)&nbsp;With \(\dim z=8\) fixed, the match holds within \(0.001\) as the estimate widens to \(\dim\tilde z=32\) (five seeds).</figcaption>
+    </figure>
+
+    <h3>Each recovered latent responds to one factor</h3>
+    <p>On Gaussian 3DShapes, sweeping one factor with the others fixed moves a single DSReg latent, while in LeJEPA coordinates the response spreads across several latents.</p>
+    <figure class="fig">
+      <div class="panel">
+        <a class="fig-link" href="static/images/interventions.png"><img src="static/images/interventions.png" width="1600" height="1135" alt="Six rows, one per 3DShapes factor: floor hue, wall hue, object hue, scale, shape and orientation. Each row shows rendered frames of a sweep of that factor, then two line plots of every learned latent's response against the sweep, one for LeJEPA and one for DSReg. In the DSReg plots a single teal curve follows the factor while the gray curves of the other latents stay flat. In the LeJEPA plots the best-matching latent tracks the factor less closely and several gray curves also move."></a>
+      </div>
+      <figcaption><span class="label">Figure 5</span><strong>The rotation turns entangled responses into one selective response per factor.</strong> One run of Gaussian 3DShapes. Each row sweeps one factor with all others fixed (rendered frames on the left); the right panels show every learned latent's standardized response in LeJEPA and in DSReg coordinates, on a shared scale per row. The flat gray curves carry the no-mixing claim across all six factors.</figcaption>
+    </figure>
+
+    <h3>Recovered latents support sparse use</h3>
+    <p>Many modules built on a world model act through a few variables at a time, such as a controller moving one object, and a rotation breaks that interface because one learned variable then moves several physical factors at once. On states \(h=Qz\) with a random orthogonal <span class="nw">\(Q\),</span> DSReg improves visual editing, sparse control, rollout prediction, and surprise detection.</p>
+    <figure class="fig">
+      <div class="panel">
+        <a class="fig-link pan" href="static/images/sparse_use.png"><img src="static/images/sparse_use.png" width="1820" height="758" alt="Six bar charts comparing LeJEPA in gray and DSReg in teal: editing success on TwoRoom, FetchSlide and PushT, and on PushT the MPC success, rollout R squared and surprise AUROC. DSReg is higher in every panel."></a>
+      </div>
+      <figcaption><span class="label">Figure 6</span><strong>DSReg improves all six sparse-use probes.</strong> DSReg in teal, LeJEPA in gray. Tasks are (1) editing (top) and (2) control, prediction, and monitoring (bottom).</figcaption>
+    </figure>
+
+    <h3>Scales to large latent dimension</h3>
+    <p>The local Jacobians factor through each anchor's neighborhood and never need to be materialized, so the full procedure reaches latent dimension 8192 on one 48&nbsp;GB GPU, with recovery declining gently as the dimension grows.</p>
+    <figure class="fig">
+      <div class="panel">
+        <a class="fig-link pan" href="static/images/scaling.png"><img src="static/images/scaling.png" width="1600" height="439" alt="Four panels. (a) Latent MCC against latent dimension d from 128 to 8k for dense and sampled evaluation. Both decline gently, and open markers continue the sampled curve at 4k and 8k. (b) MCC against the neighborhood ratio k/d for d = 256, 1024 and 4096. Recovery fails at k/d of 1 for every d, fails at every smaller ratio for the two larger d, and is high from 1.25 upward. (c) At d = 2048, MCC is flat from 16 to 256 anchors. (d) Step time on a log scale. The sampled curve is nearly flat in d while the dense curve rises steeply and crosses it between 512 and 1k."></a>
+      </div>
+      <figcaption><span class="label">Figure 7</span><strong>Scaling the full estimated procedure.</strong> (a)&nbsp;Recovery declines gently with \(d\); open markers are the single-GPU frontier, where anchor count shrinks to fit memory. (b)&nbsp;Recovery against the neighborhood ratio \(k/d\) at three scales; dashed lines mark the analytic score of an unrotated mixing, <span class="nw">\(\sqrt{2\ln d/d}\).</span> (c)&nbsp;Sixteen anchors already match \(256\) at <span class="nw">\(d=2048\).</span> (d)&nbsp;The sampled step cost is nearly flat in \(d\) while the dense (materialized) cost grows two orders of magnitude, with the curves crossing between \(d=512\) and <span class="nw">\(d=1024\).</span></figcaption>
     </figure>
   </div>
 </section>
