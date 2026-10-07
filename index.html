@@ -411,7 +411,7 @@ window.MathJax = {
   <div class="panel">
     <img src="static/images/dsreg_teaser.gif" width="1200" height="675" alt="Animation based on Figure 1. Four world latents, a sun, a moon, a thermometer and a cloud with wind, generate one scene. The learned variables start as two-latent mixtures drawn as split circles, above a grid showing which observed variables each one depends on, with 14 dependencies in total. DSReg rotates them until each circle holds a single latent, some with a minus sign, and the count falls to 10.">
   </div>
-  <figcaption>Rotating the learned latents leaves their Gaussian distribution, and hence the LeJEPA loss, unchanged. A mixed variable depends on the union of the footprints of the latents it mixes, so DSReg looks for a rotation with the fewest dependencies. In this example it recovers every world latent up to sign and permutation, although the thermometer's footprint lies inside the sun's.</figcaption>
+  <figcaption>A LeJEPA world model can learn variables that mix hidden factors (split circles), and DSReg rotates them until they affect the fewest observed variables (dots, 14 down to 10). When no two factors affect exactly the same observed variables, this separates the factors, one per learned variable, possibly reordered and flipped in sign.</figcaption>
 </figure>
 
 <main>
@@ -431,7 +431,7 @@ window.MathJax = {
       <div class="panel">
         <a class="fig-link pan" href="static/images/intro.png"><img src="static/images/intro.png" width="2000" height="669" alt="Four panels. World latents z1 to z4 are drawn as a sun, a moon, a thermometer and a cloud with wind. The observation x = g(z) is one scene that combines them. LeJEPA latents are mixtures of two factors, such as a z1 + b z2. DSReg latents are the four individual factors in a permuted order."></a>
       </div>
-      <figcaption><span class="label">Figure 1</span>From left to right: the world latents \(z\), the observed scene <span class="nw">\(x=g(z)\),</span> LeJEPA's learned variables as linear mixtures of world latents, and the variables after DSReg, which are the individual world latents up to sign and permutation.</figcaption>
+      <figcaption><span class="label">Figure 1</span><strong>DSReg turns a mixed latent state into individual latents.</strong> Four world latents \(z\) (sun, moon, temperature, wind) generate the observed scene <span class="nw">\(x=g(z)\).</span> The variables LeJEPA learns may each mix several latents, and after DSReg each variable is a single latent, possibly reordered and flipped in sign.</figcaption>
     </figure>
     <p><span class="runin">The world.</span> The latent state \(z\in\mathbb{R}^d\) is standard Gaussian with stationary Gaussian dynamics, as in the LeJEPA setting. We observe it only through an unknown nonlinear map <span class="nw">\(x=g(z)\).</span></p>
     <p><span class="runin">The learner.</span> LeJEPA predicts the embedding of the next observation from that of the current one while keeping the embedding Gaussian. <a href="https://arxiv.org/abs/2605.26379">Klindt, LeCun, and Balestriero (2026)</a> prove that at the optimum of this objective it recovers the latent state only up to a rotation, \(h(z)=Qz\) with <span class="nw">\(Q\in O(d)\),</span> so each learned variable may mix several world latents.</p>
