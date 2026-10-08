@@ -409,9 +409,9 @@ window.MathJax = {
 
 <figure class="fig teaser">
   <div class="panel">
-    <img src="static/images/dsreg_teaser.gif" width="1200" height="675" alt="Animation based on Figure 1. Four world latents, a sun, a moon, a thermometer and a cloud with wind, generate one scene. The learned variables start as two-latent mixtures drawn as split circles, above a grid showing which observed variables each one depends on, with 14 dependencies in total. DSReg rotates them until each circle holds a single latent, some with a minus sign, and the count falls to 10.">
+    <img src="static/images/dsreg_setup.gif" width="1200" height="480" alt="Animation of the setup. Four world latents, a sun, a moon, a thermometer and a cloud with wind, generate an observed scene. A world model learns four variables that each mix two latents. With DSReg added, each learned variable holds a single latent, in a different order.">
   </div>
-  <figcaption>A world model trained without reconstruction can learn variables that mix hidden factors (split circles), and DSReg rotates them until they affect the fewest observed variables (dots, 14 down to 10). When no two factors affect exactly the same observed variables, this separates the factors, one per variable, possibly reordered and flipped in sign.</figcaption>
+  <figcaption>Hidden world latents, such as the sun, the moon, temperature and wind, generate the scene we observe. A world model trained without reconstruction learns variables that can each mix several latents. When no two latents affect exactly the same observed variables, adding DSReg recovers each latent as a separate variable, up to order and sign.</figcaption>
 </figure>
 
 <main>
@@ -427,12 +427,6 @@ window.MathJax = {
 <section id="setup">
   <h2>The setup</h2>
   <div class="flow">
-    <figure class="fig">
-      <div class="panel">
-        <a class="fig-link pan" href="static/images/intro.png"><img src="static/images/intro.png" width="2000" height="669" alt="Four panels. World latents z1 to z4 are drawn as a sun, a moon, a thermometer and a cloud with wind. The observation x = g(z) is one scene that combines them. LeJEPA latents are mixtures of two factors, such as a z1 + b z2. DSReg latents are the four individual factors in a permuted order."></a>
-      </div>
-      <figcaption><span class="label">Figure 1</span><strong>DSReg turns a mixed latent state into individual latents.</strong> Four world latents \(z\) (sun, moon, temperature, wind) generate the observed scene <span class="nw">\(x=g(z)\).</span> The variables LeJEPA learns may each mix several latents, and after DSReg each variable is a single latent, possibly reordered and flipped in sign.</figcaption>
-    </figure>
     <p><span class="runin">The world.</span> The latent state \(z\in\mathbb{R}^d\) is standard Gaussian with stationary Gaussian dynamics, as in the LeJEPA setting. We observe it only through an unknown nonlinear map <span class="nw">\(x=g(z)\).</span></p>
     <p><span class="runin">The learner.</span> LeJEPA predicts the embedding of the next observation from that of the current one while keeping the embedding Gaussian. <a href="https://arxiv.org/abs/2605.26379">Klindt, LeCun, and Balestriero (2026)</a> prove that at the optimum of this objective it recovers the latent state only up to a rotation, \(h(z)=Qz\) with <span class="nw">\(Q\in O(d)\),</span> so each learned variable may mix several world latents.</p>
     <p><span class="runin">DSReg.</span> Among all rotations of the learned variables, DSReg picks a rotation under which the observations have the fewest dependencies on the rotated variables. It minimizes the support criterion, which counts the Jacobian entries that are not almost surely zero:</p>
@@ -458,7 +452,7 @@ window.MathJax = {
         <div class="panel">
           <a class="fig-link" href="static/images/footprints.png"><img src="static/images/footprints.png" width="614" height="989" alt="Top: a graph with arrows from latents z1, z2, z3 to observed variables x1 to x4. Bottom: the matching support matrix, with a dot where a latent affects an observed variable. Each latent column has a different pattern of dots."></a>
         </div>
-        <figcaption><span class="label">Figure 2</span><strong>Dependency footprints.</strong> Each column of \(\partial x/\partial z\) marks which observed variables one latent affects.</figcaption>
+        <figcaption><span class="label">Figure 1</span><strong>Dependency footprints.</strong> Each column of \(\partial x/\partial z\) marks which observed variables one latent affects.</figcaption>
       </figure>
     </div>
 
@@ -475,6 +469,12 @@ window.MathJax = {
           <p class="cond"><span class="cond-tag">Why</span><span>A variable that mixes several latents depends on the union of their footprints, so when footprints are distinct, any mixing raises the total count.</span></p>
         </div>
       </div>
+      <figure class="fig">
+        <div class="panel">
+          <img src="static/images/dsreg_mechanism.gif" width="1200" height="675" alt="Animation of how DSReg separates the latents. Learned variables start as two-latent mixtures drawn as split circles, above a grid of dots marking which observed variables each one affects, 14 in total. DSReg rotates them until each circle holds a single latent, some flipped in sign, and the count falls to 10.">
+        </div>
+        <figcaption><span class="label">Figure 2</span>A world model trained without reconstruction can learn variables that mix hidden factors (split circles), and DSReg rotates them until they affect the fewest observed variables (dots, 14 down to 10). When no two factors affect exactly the same observed variables, this separates the factors, one per variable, possibly reordered and flipped in sign.</figcaption>
+      </figure>
       <div class="result" role="group" aria-labelledby="res-weaker">
         <h3 id="res-weaker">Strictly weaker than prior structural conditions</h3>
         <div class="result-body">
