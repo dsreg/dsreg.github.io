@@ -409,7 +409,7 @@ window.MathJax = {
 
 <figure class="fig teaser">
   <div class="panel">
-    <img src="static/images/dsreg_setup.gif" width="1200" height="480" alt="Animation of the setup. Four world latents, a sun, a moon, a thermometer and a cloud with wind, generate an observed scene. A world model learns four variables that each mix two latents. With DSReg added, each learned variable holds a single latent, in a different order.">
+    <img src="static/images/dsreg_setup.gif" width="1200" height="480" alt="Animation of the setup. Four world latents, a sun, a moon, a thermometer and a cloud with wind, generate an observed scene. In a JEPA, each learned latent is an unknown mixture of two world latents. With DSReg added, each learned latent is a true latent, in a different order.">
   </div>
   <figcaption>Hidden world latents, such as the sun, the moon, temperature and wind, generate the scene we observe. A world model trained without reconstruction learns variables that can each mix several latents. When no two latents affect exactly the same observed variables, adding DSReg recovers each latent as a separate variable, up to order and sign.</figcaption>
 </figure>
